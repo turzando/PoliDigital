@@ -1,34 +1,66 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+
 import './App.css'
 
+import schoolSvg from './assets/school.svg'
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    console.log("adfasfasd")
+    console.log(email)
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="container">
+      <div className="container-login">
+        <div className="wrap-login">
+          <form className="login-form" onSubmit={handleLogin}>
+            <span className="login-form-tittle">Bem-vindo(a) ao PoliDigital!</span>
+            
+            <span className="login-form-tittle">
+              <img src={schoolSvg} alt="icon" />
+            </span>
+
+            <div className="wrap-input">
+              <input 
+                className={email !== "" ? "has-val input" : "input"} 
+                type="email" 
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+              />
+              <span className="focus-input" data-placeholder="Email"></span>
+            </div>
+
+            <div className="wrap-input">
+              <input 
+                className={password !== "" ? "has-val input" : "input"}
+                type="password" 
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+              />
+              <span className="focus-input" data-placeholder="Password"></span>
+            </div>
+
+            <div className="container-login-form-btn">
+              <button 
+                type='submit' 
+                className="login-form-btn"
+                disabled={!email || !password}
+              >Login</button>
+            </div>
+
+            <div className="text-center">
+              <span className="txt1">Esqueceu a senha?</span>
+              <a href="#" className="txt2">Trocar senha</a>
+            </div>
+          </form>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
