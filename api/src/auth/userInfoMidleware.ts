@@ -4,6 +4,8 @@ const UserInfoMiddleware = () => {
         try {
             const token = req.cookies['token']
             if (!token) return res.status(403).send()
+                console.log("atualizando token")
+            res.cookie('token', token, { maxAge: 1 * 60 * 1000 });
             return next()
         } catch (error: any) {
             res.status(403).send(error)

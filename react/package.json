@@ -12,7 +12,8 @@
   "dependencies": {
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
-    "@mui/material": "^5.16.4",
+    "@mui/icons-material": "^5.16.6",
+    "@mui/material": "^5.16.6",
     "@types/axios": "^0.14.0",
     "@types/cookie-parser": "^1.4.7",
     "@types/express": "^4.17.21",

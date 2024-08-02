@@ -20,7 +20,6 @@ const userService = {
   },
 
   isAuthenticated: () => {
-    console.log("chegou aqui")
     const token = Cookies.get('token')
     console.log('resultado do token ', token)
     return !!token
