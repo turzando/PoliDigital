@@ -1,17 +1,24 @@
 import { useState } from 'react'
+import { useNavigate, Navigate } from 'react-router-dom';
+import authService from '../../services/AuthService'
+import './Login.css'
 
-import './App.css'
+import schoolSvg from '../../assets/school.svg'
 
-import schoolSvg from './assets/school.svg'
-
-function App() {
-  const [email, setEmail] = useState("")
+function Login() {
+  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+
+  const navigate = useNavigate() 
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    console.log("adfasfasd")
-    console.log(email)
+    const response = await authService.login(username, password)
+    if (response.success) {
+      // return <Navigate to="/" />;
+
+      navigate('/dashboard', { state: { name: response.data.name } });
+    }
   }
 
   return (
@@ -27,12 +34,12 @@ function App() {
 
             <div className="wrap-input">
               <input 
-                className={email !== "" ? "has-val input" : "input"} 
-                type="email" 
-                value={email}
-                onChange={e => setEmail(e.target.value)}
+                className={username !== "" ? "has-val input" : "input"} 
+                type="text" 
+                value={username}
+                onChange={e => setUsername(e.target.value)}
               />
-              <span className="focus-input" data-placeholder="Email"></span>
+              <span className="focus-input" data-placeholder="username"></span>
             </div>
 
             <div className="wrap-input">
@@ -49,14 +56,14 @@ function App() {
               <button 
                 type='submit' 
                 className="login-form-btn"
-                disabled={!email || !password}
+                disabled={!username || !password}
               >Login</button>
             </div>
 
-            <div className="text-center">
+            {/* <div className="text-center">
               <span className="txt1">Esqueceu a senha?</span>
               <a href="#" className="txt2">Trocar senha</a>
-            </div>
+            </div> */}
           </form>
         </div>
       </div>
@@ -64,4 +71,4 @@ function App() {
   )
 }
 
-export default App
+export default Login
