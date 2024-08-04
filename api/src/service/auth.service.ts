@@ -1,6 +1,6 @@
 
 
-import PersonsRepository from '../repository/persons.repository';
+import PersonsRepository from '../repository/users.repository';
 
 export default class AuthService {
     private personsRepository: PersonsRepository;

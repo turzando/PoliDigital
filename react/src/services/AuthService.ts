@@ -1,7 +1,7 @@
 import axiosInstance from '../utils/axiosInstance'
 import Cookies from 'js-cookie';
 
-const userService = {
+const authService = {
   login: async (username: string, password: string) => {
     const config = {
         headers: {
@@ -30,4 +30,4 @@ const userService = {
   }
 }
 
-export default userService
+export default authService

@@ -5,6 +5,8 @@ import { styled } from '@mui/material/styles';
 import { keyframes } from '@emotion/react';
 import { useState } from 'react';
 
+import userService from '../../services/UserService'
+
 const DashboardContainer = styled(Container)(() => ({
     display: 'flex',
     flexDirection: 'column',
@@ -42,8 +44,13 @@ const RotatingIconButton = styled(({ rotating, ...other }: RotatingIconButtonPro
     animation: rotating ? `${rotateAnimation} 1s linear` : 'none',
 }));
 
-
 const CreateUser = () => {
+    const [fullName, setFullName] = useState('');
+    const [cpf, setCpf] = useState('');
+    const [username, setUsername] = useState('');
+    const [rg, setRg] = useState('');
+    const [email, setEmail] = useState('');
+    const [role, setRole] = useState('');
 
     const location = useLocation();
     const { name } = location.state || {};
@@ -75,9 +82,27 @@ const CreateUser = () => {
         setPassword(generateRandomPassword())
     };
 
-    const onSubmit = (data: any) => {
-        console.log(data);
+    const onSubmit = async () => {
+        const body = {
+            name: fullName,
+            cpf: cpf,
+            username: username,
+            rg: rg,
+            email: email,
+            role: role,
+            password: password
+        }
+
+        try {
+            await userService.create(body)
+        } catch (error) {
+            console.log("Error ao criar usuário")
+        }
     };
+
+    const disableSubmitButton = () => {
+        return !fullName || !cpf || !username || !rg || !email || !role
+    }
 
     return (<div style={{ backgroundColor: '#0f3892', minHeight: '100vh' }}>
         <AppBar position="relative" sx={{ backgroundColor: "#0f3892" }}>
@@ -91,31 +116,32 @@ const CreateUser = () => {
         <DashboardContainer sx={{ backgroundColor: "#0f3892" }}>
             <DashboardPaper sx={{ backgroundColor: "white" }}>
                 <Box component="form" noValidate sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px', mt: 5 }}>
-                    <TextField required id="standard-required" label="Nome completo" defaultValue="" />
-                    <TextField required id="standard-required" label="CPF" defaultValue="" />
-                    <TextField required id="standard-required" label="RG" defaultValue="" />
-                    <TextField required id="standard-required" label="email" defaultValue="" />
-                    <TextField required id="standard-required" label="username" defaultValue="" />
+                    <TextField required value={fullName} onChange={(event) => setFullName(event.target.value)} id="standard-required" label="Nome completo" />
+                    <TextField required value={cpf} onChange={(event) => setCpf(event.target.value)} id="standard-required" label="CPF" />
+                    <TextField required value={rg} onChange={(event) => setRg(event.target.value)} id="standard-required" label="RG" />
+                    <TextField required value={email} onChange={(event) => setEmail(event.target.value)} id="standard-required" label="email" />
+                    <TextField required value={username} onChange={(event) => setUsername(event.target.value)} id="standard-required" label="username" />
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <TextField disabled id="standard-required" label="password" value={password} />
+                        <TextField disabled value={password} id="standard-required" label="password" />
                         <RotatingIconButton rotating={rotating} onClick={changePassowrd}>
                             <ReplayIcon sx={{ color: 'black', fontSize: '2.0rem' }} />
                         </RotatingIconButton>
                     </Box>
-                    <TextField select required id="standard-required" label="role" defaultValue="">
+                    <TextField select value={role} onChange={(event) => { setRole(event.target.value) }} required id="standard-required" label="ROLE">
                         {predefinedRoles.map((role) => (
                             <MenuItem key={role} value={role}>
                                 {role}
                             </MenuItem>
                         ))}
-
                     </TextField>
                 </Box>
 
                 <Button
                     type="submit"
                     fullWidth
+                    disabled={disableSubmitButton()}
                     variant="contained"
+                    onClick={onSubmit}
                     sx={{ mt: 3, mb: 2, }}
                 >
                     Criar usuário

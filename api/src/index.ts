@@ -4,9 +4,11 @@ import AuthRoutes from './routes/auth.routes'
 import http from 'http'
 import cors from 'cors'
 import AuthService from './service/auth.service'
-import PersonsRepository from './repository/persons.repository'
+import UsersRepository from './repository/users.repository'
+import UsersRoutes from './routes/users.routes'
 import cookieParser from 'cookie-parser'
 import UserInfoMiddleware from './auth/userInfoMidleware'
+import UsersService from './service/users.service'
 
 const expressServer = express()
 
@@ -26,12 +28,18 @@ const db = pgp({})({
     password: 'postgres'
 })
 
-const personsRepository = new PersonsRepository(db)
-const authService = new AuthService(personsRepository)
+const usersRepository = new UsersRepository(db)
+
+const authService = new AuthService(usersRepository)
+const usersService = new UsersService(usersRepository)
 
 const userInfoMidleware = UserInfoMiddleware()
+
 const authRoutes = AuthRoutes(authService)
 expressServer.use('/api', userInfoMidleware, authRoutes)
+
+const usersRoutes = UsersRoutes(usersService)
+expressServer.use('/api/users', usersRoutes)
 
 const httpServer = http.createServer(expressServer)
 httpServer.listen(PORT, () =>
